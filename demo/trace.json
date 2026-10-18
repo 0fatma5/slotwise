@@ -1,0 +1,190 @@
+{
+  "recordedAt": "2026-10-18T12:01:31.886Z",
+  "note": "Actual responses from a fresh synthetic demo database. No secrets or session tokens.",
+  "steps": [
+    {
+      "title": "A real Node.js application",
+      "method": "GET",
+      "path": "/api/health",
+      "status": 200,
+      "response": {
+        "status": "ok",
+        "app": "SlotWise",
+        "demo": true
+      }
+    },
+    {
+      "title": "Signed in as a member",
+      "method": "GET",
+      "path": "/api/auth/me",
+      "status": 200,
+      "response": {
+        "user": {
+          "id": 2,
+          "name": "Nour Hassan",
+          "email": "nour@example.test",
+          "role": "member"
+        }
+      }
+    },
+    {
+      "title": "Explore branches and services",
+      "method": "GET",
+      "path": "/api/catalog",
+      "status": 200,
+      "response": {
+        "branches": [
+          {
+            "id": 1,
+            "name": "The District",
+            "city": "Cairo"
+          },
+          {
+            "id": 2,
+            "name": "Coastal Studio",
+            "city": "Alexandria"
+          },
+          {
+            "id": 3,
+            "name": "Garden House",
+            "city": "Cairo"
+          }
+        ],
+        "services": [
+          {
+            "id": 1,
+            "name": "Strategy session",
+            "duration": 60,
+            "price": 450,
+            "color": "purple"
+          },
+          {
+            "id": 2,
+            "name": "Design consultation",
+            "duration": 45,
+            "price": 350,
+            "color": "blue"
+          },
+          {
+            "id": 3,
+            "name": "Workspace tour",
+            "duration": 30,
+            "price": 0,
+            "color": "green"
+          }
+        ]
+      }
+    },
+    {
+      "title": "Book a strategy session",
+      "method": "POST",
+      "path": "/api/bookings",
+      "status": 201,
+      "request": {
+        "branch_id": 1,
+        "service_id": 1,
+        "starts_at": "2026-10-28T12:00:00.000Z"
+      },
+      "response": {
+        "data": {
+          "id": 13,
+          "user_id": 2,
+          "branch_id": 1,
+          "service_id": 1,
+          "starts_at": "2026-10-28T12:00:00.000Z",
+          "ends_at": "2026-10-28T13:00:00.000Z",
+          "status": "confirmed",
+          "customer": "Nour Hassan",
+          "email": "nour@example.test",
+          "branch": "The District",
+          "city": "Cairo",
+          "service": "Strategy session",
+          "price": 450,
+          "color": "purple"
+        }
+      }
+    },
+    {
+      "title": "Conflicting slots are rejected",
+      "method": "POST",
+      "path": "/api/bookings",
+      "status": 409,
+      "request": {
+        "branch_id": 1,
+        "service_id": 1,
+        "starts_at": "2026-10-28T12:00:00.000Z"
+      },
+      "response": {
+        "error": {
+          "code": "SLOT_CONFLICT",
+          "message": "This branch already has a booking during that time. Choose another slot.",
+          "requestId": "37338caa-e996-4dd4-be45-233d3a975ed7"
+        }
+      }
+    },
+    {
+      "title": "Permissions stay on the server",
+      "method": "GET",
+      "path": "/api/admin/stats",
+      "status": 403,
+      "response": {
+        "error": {
+          "code": "FORBIDDEN",
+          "message": "Administrator access is required.",
+          "requestId": "777ea82f-71ae-4789-9817-bc8616cc858e"
+        }
+      }
+    },
+    {
+      "title": "The admin sees the bigger picture",
+      "method": "GET",
+      "path": "/api/admin/stats",
+      "status": 200,
+      "response": {
+        "total": 13,
+        "confirmed": 13,
+        "cancelled": 0,
+        "bookedValue": 3650
+      }
+    },
+    {
+      "title": "Cancel and free the slot",
+      "method": "POST",
+      "path": "/api/bookings/13/cancel",
+      "status": 200,
+      "request": {},
+      "response": {
+        "message": "Booking cancelled."
+      }
+    },
+    {
+      "title": "The same time can be booked again",
+      "method": "POST",
+      "path": "/api/bookings",
+      "status": 201,
+      "request": {
+        "branch_id": 1,
+        "service_id": 1,
+        "starts_at": "2026-10-28T12:00:00.000Z"
+      },
+      "response": {
+        "data": {
+          "id": 14,
+          "user_id": 2,
+          "branch_id": 1,
+          "service_id": 1,
+          "starts_at": "2026-10-28T12:00:00.000Z",
+          "ends_at": "2026-10-28T13:00:00.000Z",
+          "status": "confirmed",
+          "customer": "Nour Hassan",
+          "email": "nour@example.test",
+          "branch": "The District",
+          "city": "Cairo",
+          "service": "Strategy session",
+          "price": 450,
+          "color": "purple"
+        }
+      }
+    }
+  ]
+}

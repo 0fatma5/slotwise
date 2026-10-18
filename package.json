@@ -1,0 +1,14 @@
+{
+  "name": "slotwise",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A Node.js booking API and responsive dashboard with session authentication and overlap-safe scheduling.",
+  "type": "module",
+  "engines": { "node": ">=24.0.0" },
+  "scripts": {
+    "start": "node src/server.js",
+    "demo": "node --env-file=.env.demo src/server.js",
+    "test": "node --test test/*.test.js"
+  },
+  "license": "MIT"
+}
